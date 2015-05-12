@@ -1,68 +1,102 @@
 package no.wact.jenjon13.assignment2.game;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class WordsFragment extends android.app.Fragment {
-    private List<String> words = new ArrayList<>();
+    private static final int NUMBER_OF_WORDS_PER_TURN = 5;
+    private Map<GameWord, TextView> words = new HashMap<>();
+    private GameHandler gameHandler;
+    private Context context;
+    private LinearLayout fragmentLayout;
+    private List<AnswerButton> answerButtons = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        final String[] wordsFromDB = getAllValuesFromTable(container);
-        for (String word : wordsFromDB) {
-            words.add(word);
-        }
+        fragmentLayout = (LinearLayout) rootView.findViewById(R.id.fragmentMainLayout);
+        context = container.getContext();
+        gameHandler = new GameHandler(context);
 
-        final LinearLayout fragmentLayout = (LinearLayout) rootView.findViewById(R.id.fragmentMainLayout);
-        for (String value : words) {
-            final Button button = new Button(getActivity());
-            button.setText(value);
-            fragmentLayout.addView(button);
-        }
+        showWordSelection();
 
-        final Button button = new Button(getActivity());
-        button.setText("I'm ready!");
-        button.setOnClickListener(new View.OnClickListener() {
+        rootView.findViewById(R.id.btnReady).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startRound();
             }
         });
-        fragmentLayout.addView(button);
-
         return rootView;
     }
 
+    /**
+     * Hides the "correct" word and displays options.
+     */
     private void startRound() {
-        Log.w("startRound", "Starting round!");
+        initNextRound();
+
+        for (GameWord word : words.keySet()) { //TODO looser coupling to dependency
+            answerButtons.add(new AnswerButton(context, word.getWord(), word.isCorrect()));
+            fragmentLayout.addView(answerButtons.get(answerButtons.size() - 1));
+
+            if (word.isCorrect()) {
+                words.get(word).setVisibility(View.GONE);
+            }
+        }
     }
 
-    private String[] getAllValuesFromTable(ViewGroup container) {
-        try (final SQLiteDatabase db = new WordsOpenHelper(container.getContext()).getReadableDatabase()) {
-            try (final Cursor cursor = db
-                    .rawQuery("SELECT * FROM " + WordsOpenHelper.WORDS_TABLE_NAME, null)) {
+    private void showWordSelection() {
+        for (GameWord word : gameHandler.getSelectionOfRandomWords(NUMBER_OF_WORDS_PER_TURN)) {
+            final TextView textView = new TextView(context);
+            textView.setText(word.getWord());
+            fragmentLayout.addView(textView);
+            words.put(word, textView);
+        }
+    }
 
-                List<String> values = new ArrayList<>();
-                if (cursor.moveToFirst()) {
-                    do {
-                        values.add(cursor.getString(0));
-                    } while (cursor.moveToNext());
+    private void initNextRound() {
+        fragmentLayout.findViewById(R.id.btnReady).setVisibility(View.GONE);
+        answerButtons.clear();
+        words.clear();
+        showWordSelection();
+    }
+
+    private void provideResponseToClient(boolean correct) {
+        Toast.makeText(context, "Your answer was " + (correct ? "" : "not ") + "correct.", Toast.LENGTH_SHORT).show();
+        fragmentLayout.findViewById(R.id.btnReady).setVisibility(View.VISIBLE);
+
+        for (AnswerButton button : answerButtons) {
+            fragmentLayout.removeView(button);
+        }
+
+        for (TextView view : words.values()) {
+            fragmentLayout.removeView(view);
+        }
+    }
+
+    private class AnswerButton extends Button {
+        public AnswerButton(Context context, String label, final boolean correct) {
+            super(context);
+            this.setText(label);
+            this.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    provideResponseToClient(correct);
                 }
-
-                return values.toArray(new String[values.size()]);
-            }
+            });
         }
     }
 }
