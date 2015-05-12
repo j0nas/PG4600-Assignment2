@@ -3,17 +3,17 @@ package no.wact.jenjon13.assignment2.game;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 public class WordsOpenHelper extends SQLiteOpenHelper {
-    public static final String WORD = "word";
     public static final String DATABASE_NAME = "WordsDb";
-    private static final int DATABASE_VERSION = 2;
     public static final String WORDS_TABLE_NAME = "dictionary";
-    private static final String DICTIONARY_TABLE_CREATE =
+    public static final String COLUMN_WORD = "word";
+    private static final int DATABASE_VERSION = 2;
+    private static final String WORDS_TABLE_CREATE =
             "CREATE TABLE " + WORDS_TABLE_NAME + " (" +
-                    WORD + " VARCHAR" +
+                    COLUMN_WORD + " VARCHAR" +
                     ");";
+
     /**
      * Create a helper object to create, open, and/or manage a database.
      * This method always returns very quickly.  The database is not actually
@@ -27,10 +27,6 @@ public class WordsOpenHelper extends SQLiteOpenHelper {
      *                {@link #onUpgrade} will be used to upgrade the database; if the database is
      *                newer, {@link #onDowngrade} will be used to downgrade the database
      */
-    public WordsOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, name, factory, version);
-    }
-
     public WordsOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -43,17 +39,15 @@ public class WordsOpenHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(DICTIONARY_TABLE_CREATE);
-        final String[] companies = new String[] {"SONY", "MICROSOFT", "NINTENDO"};
-
+        db.execSQL(WORDS_TABLE_CREATE);
+        final String[] companies = new String[]{"SONY", "MICROSOFT", "NINTENDO"};
         final StringBuilder builder = new StringBuilder("INSERT INTO " + WORDS_TABLE_NAME + " VALUES ");
+
         for (int i = 0; i < companies.length; i++) {
             builder.append("(").append(companies[i]).append(")" + (i == companies.length ? "" : ", "));
         }
 
         db.execSQL(builder.toString());
-
-        Log.w("onCreate", "Executed!");
     }
 
     /**
@@ -78,6 +72,5 @@ public class WordsOpenHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
     }
 }
