@@ -32,8 +32,6 @@ public class WordsOpenHelper extends SQLiteOpenHelper {
     public WordsOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
-
-
     }
 
     /**
