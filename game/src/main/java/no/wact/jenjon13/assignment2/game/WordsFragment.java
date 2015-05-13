@@ -16,16 +16,15 @@ import java.util.List;
 import java.util.Random;
 
 public class WordsFragment extends android.app.Fragment {
-    private static final int NUMBER_OF_WORDS_PER_TURN = 5;
+    private static final int WORDS_PER_TURN = 5;
+    private static final int ANSWERS_PER_TURN = 3;
 
     private List<String> activeWords;
-    private TextView[] activeWordViews;
     private String correctWord;
 
     private GameHandler gameHandler;
     private Context context;
     private LinearLayout fragmentLayout;
-    private List<AnswerButton> answerButtons = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,78 +34,83 @@ public class WordsFragment extends android.app.Fragment {
         context = container.getContext();
         gameHandler = new GameHandler(context);
 
+        fragmentLayout.addView(new NextRoundButton());
         fetchAndShowWordSelection();
-
-        rootView.findViewById(R.id.btnReady).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startRound();
-            }
-        });
         return rootView;
     }
 
-    /**
-     * Hides the "correct" word and displays option buttons.
-     */
     private void startRound() {
-        fragmentLayout.findViewById(R.id.btnReady).setVisibility(View.GONE);
-
-        final int correctWordIndex = new Random().nextInt(activeWords.size());
-        correctWord = activeWords.get(correctWordIndex);
-        activeWordViews[correctWordIndex].setVisibility(View.GONE);
-
+        // TODO: will fail if getNRandomWords gets enough words so that there aren't enough left for the answers!
         final List<String> unusedWords = gameHandler.getUnusedWords(activeWords);
 
-        answerButtons.clear();
-        answerButtons.add(new AnswerButton(context, unusedWords.get(0)));
-        answerButtons.add(new AnswerButton(context, unusedWords.get(1)));
-        answerButtons.add(new AnswerButton(context, correctWord));
+        List<AnswerButton> answerButtons = new ArrayList<>();
+        final int loopTo = Math.min(unusedWords.size(), ANSWERS_PER_TURN);
+        for (int i = 0; i < loopTo; i++) {
+            answerButtons.add(new AnswerButton(i == loopTo - 1 ? randomlyPickCorrectWord() : unusedWords.get(i)));
+        }
+
         Collections.shuffle(answerButtons);
         for (AnswerButton button : answerButtons) {
             fragmentLayout.addView(button);
         }
     }
 
+    private String randomlyPickCorrectWord() {
+        correctWord = activeWords.get(new Random().nextInt(activeWords.size()));
+
+        for (int i = 0; i < fragmentLayout.getChildCount(); i++) {
+            final View view = fragmentLayout.getChildAt(i);
+            if (view instanceof TextView && ((TextView) view).getText().equals(correctWord)) {
+                view.setVisibility(View.GONE);
+            }
+        }
+
+        return correctWord;
+    }
+
     private void fetchAndShowWordSelection() {
-        activeWords = gameHandler.getRandomWordSelection(NUMBER_OF_WORDS_PER_TURN);
-        activeWordViews = new TextView[activeWords.size()];
+        activeWords = gameHandler.getNRandomWords(WORDS_PER_TURN);
 
         for (int i = 0; i < activeWords.size(); i++) {
             final TextView textView = new TextView(context);
             textView.setText(activeWords.get(i));
             fragmentLayout.addView(textView);
-            activeWordViews[i] = textView;
         }
     }
 
     private void provideResponseToClient(String answer) {
         Toast.makeText(context, "Your answer was " +
                 (answer.equals(correctWord) ? "" : "not ") + "correct.", Toast.LENGTH_SHORT).show();
-        fragmentLayout.findViewById(R.id.btnReady).setVisibility(View.VISIBLE);
 
-        for (AnswerButton button : answerButtons) {
-            fragmentLayout.removeView(button);
-        }
-
-        for (TextView view : activeWordViews) {
-            fragmentLayout.removeView(view);
-        }
-
+        fragmentLayout.removeAllViews();
+        fragmentLayout.addView(new NextRoundButton());
         fetchAndShowWordSelection();
     }
 
+    private class NextRoundButton extends Button {
+        public NextRoundButton() {
+            super(context);
+            this.setText("Go!");
+            setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startRound();
+                    fragmentLayout.removeView(v);
+                }
+            });
+        }
+    }
+
     private class AnswerButton extends Button {
-        public AnswerButton(Context context, final String label) {
+        public AnswerButton(final String label) {
             super(context);
             this.setText(label);
-            this.setOnClickListener(
-                    new OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            provideResponseToClient(label);
-                        }
-                    });
+            this.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    provideResponseToClient(label);
+                }
+            });
         }
     }
 }

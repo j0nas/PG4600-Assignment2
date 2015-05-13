@@ -23,7 +23,7 @@ public class GameHandler {
         }
     }
 
-    public List<String> getRandomWordSelection(int numberOfWords) {
+    public List<String> getNRandomWords(int numberOfWords) {
         Collections.shuffle(loadedWords);
         return loadedWords.subList(0, Math.min(numberOfWords, loadedWords.size()));
     }
