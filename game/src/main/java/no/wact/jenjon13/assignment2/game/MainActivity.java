@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 public class MainActivity extends Activity {
     @Override
@@ -36,12 +35,6 @@ public class MainActivity extends Activity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
-        }
-
-        if (id == R.id.action_drop_db) {
-            final WordsOpenHelper db = new WordsOpenHelper(getApplicationContext());
-            db.getWritableDatabase().execSQL("DROP TABLE IF EXISTS " + db.TABLE_NAME);
-            Toast.makeText(getApplicationContext(), "Table dropped.", Toast.LENGTH_SHORT).show();
         }
 
         return super.onOptionsItemSelected(item);

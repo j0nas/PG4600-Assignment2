@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class WordsFragment extends android.app.Fragment {
     private static final int NUMBER_OF_WORDS_PER_TURN = 5;
-    private Map<GameWord, TextView> words = new HashMap<>();
+    private Map<GameWord, TextView> activeWords = new HashMap<>();
     private GameHandler gameHandler;
     private Context context;
     private LinearLayout fragmentLayout;
@@ -31,7 +31,7 @@ public class WordsFragment extends android.app.Fragment {
         context = container.getContext();
         gameHandler = new GameHandler(context);
 
-        showWordSelection();
+        fetchAndShowWordSelection();
 
         rootView.findViewById(R.id.btnReady).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,32 +46,32 @@ public class WordsFragment extends android.app.Fragment {
      * Hides the "correct" word and displays option buttons.
      */
     private void startRound() {
-        initNextRound();
+        fragmentLayout.findViewById(R.id.btnReady).setVisibility(View.GONE);
 
-        for (GameWord word : words.keySet()) { //TODO looser coupling to dependency
+        answerButtons.clear();
+        for (GameWord word : activeWords.keySet()) {
             answerButtons.add(new AnswerButton(context, word.getWord(), word.isCorrect()));
             fragmentLayout.addView(answerButtons.get(answerButtons.size() - 1));
 
+            /* TODO: instead of holding on to activeWords,
+             just present and forget all but one,
+             when hiding, fetch new ones, shuffle in
+             the correct word -- this loosens up a lot of dependencies
+            */
             if (word.isCorrect()) {
-                words.get(word).setVisibility(View.GONE);
+                activeWords.get(word).setVisibility(View.GONE);
             }
         }
     }
 
-    private void showWordSelection() {
+    private void fetchAndShowWordSelection() {
+        activeWords.clear();
         for (GameWord word : gameHandler.getSelectionOfRandomWords(NUMBER_OF_WORDS_PER_TURN)) {
             final TextView textView = new TextView(context);
             textView.setText(word.getWord());
             fragmentLayout.addView(textView);
-            words.put(word, textView);
+            activeWords.put(word, textView);
         }
-    }
-
-    private void initNextRound() {
-        fragmentLayout.findViewById(R.id.btnReady).setVisibility(View.GONE);
-        answerButtons.clear();
-        //words.clear();
-        //showWordSelection();
     }
 
     private void provideResponseToClient(boolean correct) {
@@ -82,9 +82,11 @@ public class WordsFragment extends android.app.Fragment {
             fragmentLayout.removeView(button);
         }
 
-        for (TextView view : words.values()) {
+        for (TextView view : activeWords.values()) {
             fragmentLayout.removeView(view);
         }
+
+        fetchAndShowWordSelection();
     }
 
     private class AnswerButton extends Button {
