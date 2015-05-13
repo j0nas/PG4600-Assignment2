@@ -14,7 +14,7 @@ public class GameHandler {
 
     public GameHandler(Context context) {
         try (final SQLiteDatabase db = new WordsOpenHelper(context).getReadableDatabase()) {
-            try (final Cursor cursor = db.rawQuery("SELECT * FROM " + WordsOpenHelper.WORDS_TABLE_NAME, null)) {
+            try (final Cursor cursor = db.rawQuery("SELECT * FROM " + WordsOpenHelper.TABLE_NAME, null)) {
                 if (cursor.moveToFirst()) {
                     do {
                         words.add(new GameWord(cursor.getString(0)));

@@ -3,16 +3,18 @@ package no.wact.jenjon13.assignment2.game;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class WordsOpenHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "WordsDb";
-    public static final String WORDS_TABLE_NAME = "dictionary";
-    public static final String COLUMN_WORD = "word";
-    private static final int DATABASE_VERSION = 2;
+    public static final String TABLE_NAME = "words";
+    public static final String COLUMN_NAME = "word";
+    private static final int DATABASE_VERSION = 1;
     private static final String WORDS_TABLE_CREATE =
-            "CREATE TABLE " + WORDS_TABLE_NAME + " (" +
-                    COLUMN_WORD + " VARCHAR" +
+            "CREATE TABLE " + TABLE_NAME + " (" +
+                    COLUMN_NAME + " VARCHAR" +
                     ");";
+    private final Context context;
 
     /**
      * Create a helper object to create, open, and/or manage a database.
@@ -29,6 +31,9 @@ public class WordsOpenHelper extends SQLiteOpenHelper {
      */
     public WordsOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
+
+
     }
 
     /**
@@ -40,14 +45,15 @@ public class WordsOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(WORDS_TABLE_CREATE);
-        final String[] companies = new String[]{"SONY", "MICROSOFT", "NINTENDO"};
-        final StringBuilder builder = new StringBuilder("INSERT INTO " + WORDS_TABLE_NAME + " VALUES ");
 
+        final StringBuilder builder = new StringBuilder("INSERT INTO " + TABLE_NAME + " VALUES ");
+        final String[] companies = context.getResources().getStringArray(R.array.companies);
         for (int i = 0; i < companies.length; i++) {
-            builder.append("(").append(companies[i]).append(")" + (i == companies.length ? "" : ", "));
+            builder.append("('").append(companies[i]).append("')").append(i != companies.length - 1 ? ", " : "");
         }
 
         db.execSQL(builder.toString());
+        Log.w("onCreate", "Created table!");
     }
 
     /**

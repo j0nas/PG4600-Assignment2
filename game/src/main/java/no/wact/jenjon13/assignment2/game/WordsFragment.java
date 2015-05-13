@@ -43,7 +43,7 @@ public class WordsFragment extends android.app.Fragment {
     }
 
     /**
-     * Hides the "correct" word and displays options.
+     * Hides the "correct" word and displays option buttons.
      */
     private void startRound() {
         initNextRound();
@@ -70,8 +70,8 @@ public class WordsFragment extends android.app.Fragment {
     private void initNextRound() {
         fragmentLayout.findViewById(R.id.btnReady).setVisibility(View.GONE);
         answerButtons.clear();
-        words.clear();
-        showWordSelection();
+        //words.clear();
+        //showWordSelection();
     }
 
     private void provideResponseToClient(boolean correct) {
