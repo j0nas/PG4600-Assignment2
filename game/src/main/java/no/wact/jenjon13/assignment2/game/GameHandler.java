@@ -9,25 +9,34 @@ import java.util.Collections;
 import java.util.List;
 
 public class GameHandler {
-    private List<GameWord> words = new ArrayList<>();
-    private List<GameWord> activeWords = new ArrayList<>();
+    private List<String> loadedWords = new ArrayList<>();
 
     public GameHandler(Context context) {
         try (final SQLiteDatabase db = new WordsOpenHelper(context).getReadableDatabase()) {
             try (final Cursor cursor = db.rawQuery("SELECT * FROM " + WordsOpenHelper.TABLE_NAME, null)) {
                 if (cursor.moveToFirst()) {
                     do {
-                        words.add(new GameWord(cursor.getString(0)));
+                        loadedWords.add(cursor.getString(0));
                     } while (cursor.moveToNext());
                 }
             }
         }
     }
 
-    public List<GameWord> getSelectionOfRandomWords(int numberOfWords) {
-        Collections.shuffle(words);
-        activeWords = words.subList(0, Math.min(numberOfWords, words.size()));
-        activeWords.get(0).setCorrect(true);
-        return activeWords;
+    public List<String> getRandomWordSelection(int numberOfWords) {
+        Collections.shuffle(loadedWords);
+        return loadedWords.subList(0, Math.min(numberOfWords, loadedWords.size()));
+    }
+
+    public List<String> getUnusedWords(List<String> usedWords) {
+        List<String> unusedWords = new ArrayList<>();
+
+        for (String word : loadedWords) {
+            if (!usedWords.contains(word)) {
+                unusedWords.add(word);
+            }
+        }
+
+        return unusedWords;
     }
 }
