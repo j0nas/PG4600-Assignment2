@@ -6,6 +6,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import no.wact.jenjon13.assignment2.game.fragments.AboutFragment;
+import no.wact.jenjon13.assignment2.game.fragments.HighscoresFragment;
+import no.wact.jenjon13.assignment2.game.fragments.TitleScreenFragment;
+import no.wact.jenjon13.assignment2.game.fragments.WordsFragment;
 
 public class MainActivity extends Activity {
     @Override

@@ -1,4 +1,4 @@
-package no.wact.jenjon13.assignment2.game;
+package no.wact.jenjon13.assignment2.game.fragments;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import no.wact.jenjon13.assignment2.game.GameHandler;
+import no.wact.jenjon13.assignment2.game.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
