@@ -50,15 +50,15 @@ public class WordsFragment extends Fragment {
             currentWords.add(adapter.getItem(i));
         }
 
+        // TODO: will fail if getNRandomWords gets enough words so that there aren't enough left for the answers!
+        final List<String> unusedWords = gameHandler.getUnusedWords(currentWords);
+
         correctWord = currentWords.remove(new Random().nextInt(currentWords.size()));
         Collections.shuffle(currentWords);
         adapter.clear();
         adapter.addAll(currentWords);
 
         controlsContain.removeAllViews();
-        // TODO: will fail if getNRandomWords gets enough words so that there aren't enough left for the answers!
-        final List<String> unusedWords = gameHandler.getUnusedWords(currentWords);
-
         List<AnswerButton> answerButtons = new ArrayList<>();
         final int loopTo = Math.min(unusedWords.size(), ANSWERS_PER_TURN);
         for (int i = 0; i < loopTo; i++) {
