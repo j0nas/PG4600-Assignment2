@@ -3,6 +3,7 @@ package no.wact.jenjon13.assignment2.game;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import no.wact.jenjon13.assignment2.game.db.WordsOpenHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;

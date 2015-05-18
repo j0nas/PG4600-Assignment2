@@ -1,9 +1,10 @@
-package no.wact.jenjon13.assignment2.game;
+package no.wact.jenjon13.assignment2.game.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import no.wact.jenjon13.assignment2.game.R;
 
 public class WordsOpenHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "WordsDb";
