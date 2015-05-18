@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class HighscoresOpenHelper extends SQLiteOpenHelper implements AutoCloseable {
     public static final String DATABASE_NAME = "ScoresDb";
     public static final String TABLE_NAME = "highscores";
@@ -28,6 +31,20 @@ public class HighscoresOpenHelper extends SQLiteOpenHelper implements AutoClosea
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SCORES_TABLE_CREATE);
+    }
+
+    public String[] getHighscores() {
+        final List<String> list = new ArrayList<>();
+        try (SQLiteDatabase readableDatabase = this.getReadableDatabase();
+             Cursor cursor = readableDatabase.query(false, TABLE_NAME, null, null, null, null, null, "score DESC", null)) {
+            if (cursor.moveToFirst()) {
+                do {
+                    list.add(cursor.getString(1) + ": " + cursor.getInt(0));
+                } while (cursor.moveToNext());
+            }
+        }
+
+        return list.toArray(new String[list.size()]);
     }
 
     public void saveScore(int score, String name) {
