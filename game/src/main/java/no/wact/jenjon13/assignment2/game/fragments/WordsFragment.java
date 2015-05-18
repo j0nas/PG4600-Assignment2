@@ -16,16 +16,16 @@ import java.util.List;
 import java.util.Random;
 
 public class WordsFragment extends Fragment {
+    public static final String ROUND_TXT_PREFIX = "Round #";
     private static final int WORDS_PER_TURN = 5;
     private static final int ANSWERS_PER_TURN = 3;
-
     private String correctWord;
-
     private GameHandler gameHandler;
     private Context context;
     private RelativeLayout gameContain;
     private LinearLayout controlsContain;
     private ArrayAdapter<String> adapter;
+    private int roundNumber = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,6 +47,8 @@ public class WordsFragment extends Fragment {
     }
 
     private void startRound() {
+        ((TextView) gameContain.findViewById(R.id.txtRoundNum)).setText(ROUND_TXT_PREFIX + ++roundNumber);
+
         List<String> currentWords = new ArrayList<>();
         for (int i = 0; i < adapter.getCount(); i++) {
             currentWords.add(adapter.getItem(i));
@@ -74,14 +76,22 @@ public class WordsFragment extends Fragment {
     }
 
     private void provideResponseToClient(String answer) {
-        Toast.makeText(context, "Your answer was " + (answer.equals(correctWord) ? "" : "not ") + "correct.",
+        final boolean answerIsCorrect = answer.equals(correctWord);
+        Toast.makeText(context, "Your answer was " + (answerIsCorrect ? "" : "not ") + "correct.",
                 Toast.LENGTH_SHORT).show();
 
-        adapter.clear();
-        adapter.addAll(gameHandler.getNRandomWords(WORDS_PER_TURN));
+        if (answerIsCorrect) {
+            adapter.clear();
+            adapter.addAll(gameHandler.getNRandomWords(WORDS_PER_TURN));
 
-        controlsContain.removeAllViews();
-        controlsContain.addView(new NextRoundButton());
+            controlsContain.removeAllViews();
+            controlsContain.addView(new NextRoundButton());
+            return;
+        }
+
+        gameHandler.saveScore(roundNumber);
+        roundNumber = 0;
+        getFragmentManager().popBackStackImmediate();
     }
 
     private class NextRoundButton extends Button {
