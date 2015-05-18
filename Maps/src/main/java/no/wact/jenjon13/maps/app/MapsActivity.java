@@ -1,16 +1,17 @@
 package no.wact.jenjon13.maps.app;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends FragmentActivity {
-    private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +34,18 @@ public class MapsActivity extends FragmentActivity {
     }
 
     private void setUpMap() {
-        final LatLng position = new LatLng(59.951458, 10.7426095);
-        final MarkerOptions home = new MarkerOptions().position(position).title("Home");
-        mMap.addMarker(home);
+        Toast.makeText(getApplicationContext(), "Fetching locating, please standby..", Toast.LENGTH_LONG).show();
+        mMap.setMyLocationEnabled(true);
+        mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+            @Override
+            public void onMyLocationChange(Location location) {
+                final LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16.0f));
+                mMap.clear();
+                mMap.addMarker(new MarkerOptions().position(latLng).title("Current position"));
+            }
+        });
 
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(home.getPosition(), 17, 0, 0)));
         new WeatherInfoTask().execute();
     }
 }

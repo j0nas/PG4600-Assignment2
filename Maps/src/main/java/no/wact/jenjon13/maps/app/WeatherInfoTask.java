@@ -1,7 +1,6 @@
 package no.wact.jenjon13.maps.app;
 
 import android.os.AsyncTask;
-import android.util.Log;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
@@ -19,7 +18,7 @@ import java.util.List;
 class WeatherInfoTask extends AsyncTask<String, String, String> {
     @Override
     protected void onPostExecute(String s) {
-        Log.w("ASYNCTASK", s);
+        //Log.w("ASYNCTASK", s);
     }
 
     @Override
