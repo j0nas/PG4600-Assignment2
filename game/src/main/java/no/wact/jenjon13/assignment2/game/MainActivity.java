@@ -1,7 +1,9 @@
 package no.wact.jenjon13.assignment2.game;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -13,7 +15,7 @@ public class MainActivity extends Activity {
         if (savedInstanceState == null) {
             getFragmentManager()
                     .beginTransaction()
-                    .add(R.id.container, new WordsFragment())
+                    .add(R.id.container, new TitleScreenFragment())
                     .commit();
         }
     }
@@ -38,5 +40,29 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void replaceFragments(String s) {
+        Fragment newFragment;
+        switch (s) {
+            case "New Game":
+                newFragment = new WordsFragment();
+                break;
+            case "Highscores":
+                newFragment = new HighscoresFragment();
+                break;
+            case "About":
+                newFragment = new AboutFragment();
+                break;
+            default:
+                Log.wtf("replaceFragments", "No such case: " + s);
+                return;
+        }
+
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, newFragment)
+                .addToBackStack(null)
+                .commit();
     }
 }

@@ -1,26 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragmentGameLayout"
+    android:id="@+id/fragmentHighscoresLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity$PlaceholderFragment">
+    android:paddingTop="@dimen/activity_vertical_margin">
 
     <ListView
-        android:id="@+id/wordsList"
+        android:id="@+id/listHighscores"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_above="@+id/controlsContain" />
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnBackHighscores"
+        android:layout_alignParentTop="true" />
 
-    <LinearLayout
-        android:id="@+id/controlsContain"
+    <Button
+        android:id="@+id/btnBackHighscores"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:orientation="vertical" />
+        android:layout_centerHorizontal="true"
+        android:text="Back" />
 </RelativeLayout>

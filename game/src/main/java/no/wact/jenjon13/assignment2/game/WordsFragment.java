@@ -1,5 +1,6 @@
 package no.wact.jenjon13.assignment2.game;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class WordsFragment extends android.app.Fragment {
+public class WordsFragment extends Fragment {
     private static final int WORDS_PER_TURN = 5;
     private static final int ANSWERS_PER_TURN = 3;
 
@@ -20,7 +21,7 @@ public class WordsFragment extends android.app.Fragment {
 
     private GameHandler gameHandler;
     private Context context;
-    private RelativeLayout fragmentLayout;
+    private RelativeLayout gameContain;
     private LinearLayout controlsContain;
     private ArrayAdapter<String> adapter;
 
@@ -28,15 +29,15 @@ public class WordsFragment extends android.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        fragmentLayout = (RelativeLayout) rootView.findViewById(R.id.fragmentMainLayout);
+        gameContain = (RelativeLayout) rootView.findViewById(R.id.fragmentGameLayout);
         context = container.getContext();
         gameHandler = new GameHandler(context);
 
-        controlsContain = (LinearLayout) fragmentLayout.findViewById(R.id.controlsContain);
+        controlsContain = (LinearLayout) gameContain.findViewById(R.id.controlsContain);
         controlsContain.addView(new NextRoundButton());
 
         adapter = new ArrayAdapter<>(rootView.getContext(), android.R.layout.simple_list_item_1);
-        ((ListView) fragmentLayout.findViewById(R.id.wordsList)).setAdapter(adapter);
+        ((ListView) gameContain.findViewById(R.id.wordsList)).setAdapter(adapter);
 
         adapter.addAll(gameHandler.getNRandomWords(WORDS_PER_TURN));
 
@@ -90,7 +91,7 @@ public class WordsFragment extends android.app.Fragment {
                 @Override
                 public void onClick(View v) {
                     startRound();
-                    fragmentLayout.removeView(v);
+                    gameContain.removeView(v);
                 }
             });
         }
