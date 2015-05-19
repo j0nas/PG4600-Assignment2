@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/margin">
+
+    <Button
+        android:id="@+id/btnBackRegisterScore"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Back"/>
+
+    <Button
+        android:id="@+id/btnSaveRegisterScore"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnBackRegisterScore"
+        android:layout_alignStart="@+id/btnBackRegisterScore"
+        android:text="Save"/>
+
+    <EditText
+        android:id="@+id/txtNameRegisterScore"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:inputType="text"/>
+
+    <TextView
+        android:id="@+id/txtNameLabelRegisterScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/txtNameRegisterScore"
+        android:layout_below="@+id/txtNameRegisterScore"
+        android:labelFor="@+id/txtNameRegisterScore"
+        android:text="Your name"
+        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+    <TextView
+        android:id="@+id/txtTitleRegisterScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="43dp"
+        android:text="New highscore!"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    <TextView
+        android:id="@+id/txtScoreRegisterScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtTitleRegisterScore"
+        android:layout_centerHorizontal="true"
+        android:textAppearance="?android:attr/textAppearanceSmall"/>
+</RelativeLayout>

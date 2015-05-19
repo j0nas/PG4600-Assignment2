@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
     android:id="@+id/fragmentHighscoresLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin">
+    android:padding="@dimen/margin">
 
     <ListView
         android:id="@+id/listHighscores"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btnBackHighscores"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"/>
 
     <Button
         android:id="@+id/btnBackHighscores"
@@ -21,5 +19,5 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="Back" />
+        android:text="Back"/>
 </RelativeLayout>
