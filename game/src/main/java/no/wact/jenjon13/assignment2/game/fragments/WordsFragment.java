@@ -105,7 +105,7 @@ public class WordsFragment extends Fragment {
                     (roundNumber - 1 > 0) &&
                             (db.countHighScoreEntries() < HighscoresOpenHelper.MAX_ENTRIES ||
                                     db.getIdOfLowestScoreEntryIfLowerThan(roundNumber - 1) > -1) ?
-                            R.layout.fragment_register_score : R.layout.fragment_menuscreen, roundNumber - 1);
+                            R.layout.fragment_register_score : R.layout.fragment_title_screen, roundNumber - 1);
         }
     }
 

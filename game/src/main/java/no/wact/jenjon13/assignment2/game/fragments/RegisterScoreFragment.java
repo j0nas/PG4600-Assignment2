@@ -19,7 +19,7 @@ public class RegisterScoreFragment extends Fragment {
         rootView.findViewById(R.id.btnBackRegisterScore).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) getActivity()).replaceFragments(R.layout.fragment_menuscreen, -1);
+                ((MainActivity) getActivity()).replaceFragments(R.layout.fragment_title_screen, -1);
             }
         });
 
@@ -34,7 +34,7 @@ public class RegisterScoreFragment extends Fragment {
                 if (!name.isEmpty()) {
                     try (HighscoresOpenHelper db = new HighscoresOpenHelper(rootView.getContext())) {
                         db.saveScore(score, name);
-                        ((MainActivity) getActivity()).replaceFragments(R.layout.fragment_menuscreen, -1);
+                        ((MainActivity) getActivity()).replaceFragments(R.layout.fragment_title_screen, -1);
                     }
                 } else {
                     Toast.makeText(rootView.getContext(), "Enter a name", Toast.LENGTH_SHORT).show();

@@ -30,7 +30,7 @@ public class MainActivity extends Activity {
     public void replaceFragments(int fragmentId, int score) {
         Fragment newFragment;
         switch (fragmentId) {
-            case R.layout.fragment_menuscreen:
+            case R.layout.fragment_title_screen:
                 newFragment = new TitleScreenFragment();
                 break;
             case R.layout.fragment_main:
