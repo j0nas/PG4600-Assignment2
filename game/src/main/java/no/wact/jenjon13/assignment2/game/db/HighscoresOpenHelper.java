@@ -15,10 +15,12 @@ public class HighscoresOpenHelper extends SQLiteOpenHelper implements AutoClosea
     public static final String TABLE_NAME = "highscores";
     public static final String SCORE_COLUMN_NAME = "score";
     public static final String NAME_COLUMN_NAME = "name";
+    private static final String ID_COLUMN_NAME = "id";
 
     private static final int DATABASE_VERSION = 1;
     private static final String SCORES_TABLE_CREATE =
             "CREATE TABLE " + TABLE_NAME + " (" +
+                    ID_COLUMN_NAME + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                     SCORE_COLUMN_NAME + " INT, " +
                     NAME_COLUMN_NAME + " VARCHAR" +
                     ");";
@@ -39,7 +41,7 @@ public class HighscoresOpenHelper extends SQLiteOpenHelper implements AutoClosea
              Cursor cursor = readableDatabase.query(false, TABLE_NAME, null, null, null, null, null, "score DESC", null)) {
             if (cursor.moveToFirst()) {
                 do {
-                    list.add(cursor.getString(1) + ": " + cursor.getInt(0));
+                    list.add(cursor.getString(2) + ": " + cursor.getInt(1));
                 } while (cursor.moveToNext());
             }
         }
@@ -50,28 +52,29 @@ public class HighscoresOpenHelper extends SQLiteOpenHelper implements AutoClosea
     public void saveScore(int score, String name) {
         try (SQLiteDatabase db = this.getWritableDatabase()) {
             final ContentValues values = new ContentValues();
-            values.put("score", score);
-            values.put("name", name);
+            values.put(SCORE_COLUMN_NAME, score);
+            values.put(NAME_COLUMN_NAME, name);
 
-
-            int entriesCount;
             try (Cursor query = db.query(false, TABLE_NAME, null, null, null, null, null, null, null)) {
-                entriesCount = query.getCount();
+                if (query.getCount() < MAX_ENTRIES) {
+                    db.insert(TABLE_NAME, null, values);
+                    return;
+                }
             }
 
-            if (entriesCount < MAX_ENTRIES) {
-                final long insert = db.insert(TABLE_NAME, null, values);
-                Log.w("saveScore:insert", "Inserted as row #" + String.valueOf(insert));
-                return;
+            String id = null;
+            try (Cursor cursor = db.rawQuery("SELECT id, score FROM " + TABLE_NAME + " ORDER BY score ASC LIMIT 1", null)) {
+                if (cursor.moveToFirst()) {
+                    if (score <= cursor.getInt(1)) {
+                        Log.w("saveScore", "The lowest found value isn higher than the provided score.");
+                        return;
+                    }
+
+                    id = cursor.getString(0);
+                }
             }
 
-            /*
-            final int delete = db.delete(TABLE_NAME, "score = (SELECT min(score) FROM " + TABLE_NAME + " LIMIT 1)", null);
-            Log.w("delete", "affected rows: " + delete);
-            */
-
-            final long insert = db.insert(TABLE_NAME, null, values);
-            Log.w("insert", "affected rows: " + insert);
+            db.update(TABLE_NAME, values, "id = " + id, null);
         }
     }
 
