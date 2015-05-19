@@ -18,19 +18,19 @@
             android:id="@+id/btnNewGame"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="New Game"/>
+            android:text="@string/titlescreen_btnNewGame"/>
 
         <Button
             android:id="@+id/btnHighscore"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Highscores"/>
+            android:text="@string/titlescreen_btnHighscores"/>
 
         <Button
             android:id="@+id/btnAbout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="About"/>
+            android:text="@string/titlescreen_btnAbout"/>
 
     </LinearLayout>
 </RelativeLayout>

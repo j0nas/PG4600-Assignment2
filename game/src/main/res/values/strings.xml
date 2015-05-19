@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Kim's Game</string>
+    <string name="app_name">Kim\'s Game</string>
     <string name="action_settings">Settings</string>
 
     <string-array name="companies">
@@ -18,4 +18,7 @@
     <string name="about_txtAuthor">By Jonas Jensen</string>
     <string name="about_txtAuthorMail">jenjon13@student.westerdals.no</string>
     <string name="about_txtWikilink">http://en.wikipedia.org/wiki/Kim%27s_Game</string>
+    <string name="titlescreen_btnNewGame">New Game</string>
+    <string name="titlescreen_btnHighscores">Highscores</string>
+    <string name="titlescreen_btnAbout">About</string>
 </resources>

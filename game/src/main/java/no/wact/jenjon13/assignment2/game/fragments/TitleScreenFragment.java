@@ -13,7 +13,18 @@ public class TitleScreenFragment extends Fragment {
     private View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            ((MainActivity) getActivity()).replaceFragments(((Button) v).getText().toString());
+            final String buttonText = ((Button) v).getText().toString();
+            int targetFragmentId = -1;
+
+            if (buttonText.equals(getResources().getString(R.string.titlescreen_btnAbout))) {
+                targetFragmentId = R.layout.fragment_about;
+            } else if (buttonText.equals(getResources().getString(R.string.titlescreen_btnHighscores))) {
+                targetFragmentId = R.layout.fragment_higscores;
+            } else {
+                targetFragmentId = R.layout.fragment_main;
+            }
+
+            ((MainActivity) getActivity()).replaceFragments(targetFragmentId, -1);
         }
     };
 

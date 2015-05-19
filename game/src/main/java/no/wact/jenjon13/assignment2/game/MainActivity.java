@@ -6,10 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import no.wact.jenjon13.assignment2.game.fragments.AboutFragment;
-import no.wact.jenjon13.assignment2.game.fragments.HighscoresFragment;
-import no.wact.jenjon13.assignment2.game.fragments.TitleScreenFragment;
-import no.wact.jenjon13.assignment2.game.fragments.WordsFragment;
+import no.wact.jenjon13.assignment2.game.fragments.*;
 
 public class MainActivity extends Activity {
     @Override
@@ -46,20 +43,29 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void replaceFragments(String s) {
+    public void replaceFragments(int fragmentId, int score) {
         Fragment newFragment;
-        switch (s) {
-            case "New Game":
+        switch (fragmentId) {
+            case R.layout.fragment_menuscreen:
+                newFragment = new TitleScreenFragment();
+                break;
+            case R.layout.fragment_main:
                 newFragment = new WordsFragment();
                 break;
-            case "Highscores":
+            case R.layout.fragment_register_score:
+                newFragment = new RegisterScoreFragment();
+                final Bundle bundle = new Bundle();
+                bundle.putInt("SCORE", score);
+                newFragment.setArguments(bundle);
+                break;
+            case R.layout.fragment_higscores:
                 newFragment = new HighscoresFragment();
                 break;
-            case "About":
+            case R.layout.fragment_about:
                 newFragment = new AboutFragment();
                 break;
             default:
-                Log.wtf("replaceFragments", "No such case: " + s);
+                Log.wtf("replaceFragments", "No such case: " + fragmentId);
                 return;
         }
 

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import no.wact.jenjon13.assignment2.game.GameHandler;
+import no.wact.jenjon13.assignment2.game.MainActivity;
 import no.wact.jenjon13.assignment2.game.R;
 
 import java.util.ArrayList;
@@ -89,9 +90,8 @@ public class WordsFragment extends Fragment {
             return;
         }
 
-        gameHandler.saveScore(roundNumber);
-        roundNumber = 0;
-        getFragmentManager().popBackStackImmediate();
+        // TODO: only replace fragment if score is high enough!
+        ((MainActivity) getActivity()).replaceFragments(R.layout.fragment_register_score, roundNumber - 1);
     }
 
     private class NextRoundButton extends Button {
