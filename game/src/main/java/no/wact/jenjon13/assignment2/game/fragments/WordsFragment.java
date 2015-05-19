@@ -10,6 +10,7 @@ import android.widget.*;
 import no.wact.jenjon13.assignment2.game.GameHandler;
 import no.wact.jenjon13.assignment2.game.MainActivity;
 import no.wact.jenjon13.assignment2.game.R;
+import no.wact.jenjon13.assignment2.game.db.HighscoresOpenHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -90,8 +91,12 @@ public class WordsFragment extends Fragment {
             return;
         }
 
-        // TODO: only replace fragment if score is high enough!
-        ((MainActivity) getActivity()).replaceFragments(R.layout.fragment_register_score, roundNumber - 1);
+        try (HighscoresOpenHelper db = new HighscoresOpenHelper(context)) {
+            ((MainActivity) getActivity()).replaceFragments(
+                    db.countHighScoreEntries() < HighscoresOpenHelper.MAX_ENTRIES ||
+                            db.getIdOfLowestScoreEntryIfLowerThan(roundNumber - 1) > -1 ?
+                            R.layout.fragment_register_score : R.layout.fragment_menuscreen, roundNumber - 1);
+        }
     }
 
     private class NextRoundButton extends Button {

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import no.wact.jenjon13.assignment2.game.db.HighscoresOpenHelper;
 import no.wact.jenjon13.assignment2.game.fragments.*;
 
 public class MainActivity extends Activity {
@@ -55,7 +56,7 @@ public class MainActivity extends Activity {
             case R.layout.fragment_register_score:
                 newFragment = new RegisterScoreFragment();
                 final Bundle bundle = new Bundle();
-                bundle.putInt("SCORE", score);
+                bundle.putInt(HighscoresOpenHelper.SCORE_COLUMN_NAME, score);
                 newFragment.setArguments(bundle);
                 break;
             case R.layout.fragment_higscores:

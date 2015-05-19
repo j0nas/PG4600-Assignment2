@@ -24,7 +24,7 @@ public class RegisterScoreFragment extends Fragment {
         });
 
 
-        final int score = getArguments().getInt("SCORE");
+        final int score = getArguments().getInt(HighscoresOpenHelper.SCORE_COLUMN_NAME);
         ((TextView) rootView.findViewById(R.id.txtScoreRegisterScore)).setText(String.valueOf(score));
 
         rootView.findViewById(R.id.btnSaveRegisterScore).setOnClickListener(new View.OnClickListener() {
