@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="Back"/>
+        android:text="@string/btnBack"/>
 
     <Button
         android:id="@+id/btnSaveRegisterScore"
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/btnBackRegisterScore"
         android:layout_alignStart="@+id/btnBackRegisterScore"
-        android:text="Save"/>
+        android:text="@string/highscore_txtSave"/>
 
     <EditText
         android:id="@+id/txtNameRegisterScore"
@@ -37,7 +37,7 @@
         android:layout_alignStart="@+id/txtNameRegisterScore"
         android:layout_below="@+id/txtNameRegisterScore"
         android:labelFor="@+id/txtNameRegisterScore"
-        android:text="Your name"
+        android:text="@string/highscore_txtYourName"
         android:textAppearance="?android:attr/textAppearanceSmall"/>
 
     <TextView
@@ -47,7 +47,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="43dp"
-        android:text="New highscore!"
+        android:text="@string/highscore_txtNewHighScore"
         android:textAppearance="?android:attr/textAppearanceMedium"/>
 
     <TextView
@@ -56,6 +56,5 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtTitleRegisterScore"
         android:layout_centerHorizontal="true"
-        android:text="SUKDSAKLD"
         android:textAppearance="?android:attr/textAppearanceSmall"/>
 </RelativeLayout>

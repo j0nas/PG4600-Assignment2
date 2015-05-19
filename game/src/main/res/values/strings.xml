@@ -21,4 +21,8 @@
     <string name="titlescreen_btnNewGame">New Game</string>
     <string name="titlescreen_btnHighscores">Highscores</string>
     <string name="titlescreen_btnAbout">About</string>
+    <string name="btnBack">Back</string>
+    <string name="highscore_txtNewHighScore">New highscore!</string>
+    <string name="highscore_txtYourName">Your name</string>
+    <string name="highscore_txtSave">Save</string>
 </resources>
