@@ -36,6 +36,11 @@ public class HighscoresOpenHelper extends SQLiteOpenHelper implements AutoClosea
         db.execSQL(SCORES_TABLE_CREATE);
     }
 
+    /**
+     * Gets all the held rows in the table as a String array.
+     *
+     * @return A String[] with values with the following formatting: "name: score".
+     */
     public String[] getHighscores() {
         final List<String> list = new ArrayList<>();
         try (Cursor cursor = db.query(false, TABLE_NAME, null, null, null, null, null, "score DESC", null)) {
@@ -49,6 +54,15 @@ public class HighscoresOpenHelper extends SQLiteOpenHelper implements AutoClosea
         return list.toArray(new String[list.size()]);
     }
 
+    /**
+     * Creates a new entry in the table with the provided values if the table has fewer than
+     * {@link MAX_ENTRIES} entries, or overwrite the lowest score in the table if any entries
+     * with lower scores than the provided score are found, using {@link #getIdOfLowestScoreEntryIfLowerThan(int)
+     * getIdOfLowestScoreEntryIfLowerThan}
+     *
+     * @param score The score to persist.
+     * @param name  The name which is to be associated with the provided score.
+     */
     public void saveScore(int score, String name) {
         final ContentValues values = new ContentValues();
         values.put(SCORE_COLUMN_NAME, score);
@@ -67,12 +81,24 @@ public class HighscoresOpenHelper extends SQLiteOpenHelper implements AutoClosea
         }
     }
 
+    /**
+     * Convenience method to count the amount of entries held by the highscore table.
+     *
+     * @return The amount of rows held by the highscore table, as an integer
+     */
     public int countHighScoreEntries() {
         try (Cursor query = db.query(false, TABLE_NAME, null, null, null, null, null, null, null)) {
             return query.getCount();
         }
     }
 
+    /**
+     * Returns the id of the row with the lowest score if it is lower than the provided parameter.
+     *
+     * @param score The minimum score, which found entries have to be higher than, in order to match.
+     * @return The id of the corresponding row as an integer, if any row with a score lower than
+     * the provided parameter was found. Otherwise, returns -1
+     */
     public int getIdOfLowestScoreEntryIfLowerThan(int score) {
         try (Cursor cursor = db.rawQuery("SELECT id, score FROM " + TABLE_NAME + " ORDER BY score ASC LIMIT 1", null)) {
             return (cursor.moveToFirst() && (score > cursor.getInt(1))) ? cursor.getInt(0) : -1;

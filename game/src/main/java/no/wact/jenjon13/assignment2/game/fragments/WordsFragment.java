@@ -48,6 +48,10 @@ public class WordsFragment extends Fragment {
         return rootView;
     }
 
+    /**
+     * Randomly removes one of the previously displayed words.
+     * Initializes and displays correct and wrong answers for the client.
+     */
     private void startRound() {
         ((TextView) gameContain.findViewById(R.id.txtRoundNum)).setText(ROUND_TXT_PREFIX + ++roundNumber);
 
@@ -77,6 +81,11 @@ public class WordsFragment extends Fragment {
         }
     }
 
+    /**
+     * Provides feedback to the client and initializes "Start next round" controls.
+     *
+     * @param answer The answer which the client picked, which is to be evaluated for correctness.
+     */
     private void provideResponseToClient(String answer) {
         final boolean answerIsCorrect = answer.equals(correctWord);
         Toast.makeText(context, "Your answer was " + (answerIsCorrect ? "" : "not ") + "correct.",
@@ -93,8 +102,9 @@ public class WordsFragment extends Fragment {
 
         try (HighscoresOpenHelper db = new HighscoresOpenHelper(context)) {
             ((MainActivity) getActivity()).replaceFragments(
-                    db.countHighScoreEntries() < HighscoresOpenHelper.MAX_ENTRIES ||
-                            db.getIdOfLowestScoreEntryIfLowerThan(roundNumber - 1) > -1 ?
+                    (roundNumber - 1 > 0) &&
+                            (db.countHighScoreEntries() < HighscoresOpenHelper.MAX_ENTRIES ||
+                                    db.getIdOfLowestScoreEntryIfLowerThan(roundNumber - 1) > -1) ?
                             R.layout.fragment_register_score : R.layout.fragment_menuscreen, roundNumber - 1);
         }
     }
@@ -103,7 +113,8 @@ public class WordsFragment extends Fragment {
         public NextRoundButton() {
             super(context);
             this.setText("Go!");
-            this.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            this.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT));
             setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -118,7 +129,8 @@ public class WordsFragment extends Fragment {
         public AnswerButton(final String label) {
             super(context);
             this.setText(label);
-            this.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            this.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT));
             this.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {

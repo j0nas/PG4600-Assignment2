@@ -26,6 +26,11 @@ public class WordsOpenHelper extends SQLiteOpenHelper implements AutoCloseable {
         this.context = context;
     }
 
+    /**
+     * Returns a list containing all held words in the table.
+     *
+     * @return A list contaning the words.
+     */
     public List<String> fetchWords() {
         final ArrayList<String> words = new ArrayList<>();
 
