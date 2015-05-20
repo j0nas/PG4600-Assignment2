@@ -11,14 +11,13 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/textView"
+        android:layout_below="@+id/mapMarkerData"
         tools:context="no.wact.jenjon13.maps.app.MapsActivity"/>
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/mapMarkerData"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
         android:text="Small Text"
         android:textAppearance="?android:attr/textAppearanceSmall"/>
