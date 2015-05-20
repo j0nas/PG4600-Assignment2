@@ -1,6 +1,7 @@
 package no.wact.jenjon13.maps.app;
 
 import android.os.AsyncTask;
+import com.google.android.gms.maps.model.LatLng;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
@@ -15,20 +16,32 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-class WeatherInfoTask extends AsyncTask<String, String, String> {
+class NearbyPublicTransportStopsFetcherTask extends AsyncTask<String, String, String> {
+    private final TaskListener listener;
+    private final LatLng latLng;
+
+    public NearbyPublicTransportStopsFetcherTask(TaskListener listener, LatLng latLng) {
+        this.listener = listener;
+        this.latLng = latLng;
+    }
+
     @Override
-    protected void onPostExecute(String s) {
-        //Log.w("ASYNCTASK", s);
+    protected void onPostExecute(String json) {
+        listener.onTaskCompleted(json);
     }
 
     @Override
     protected String doInBackground(String... params) {
+        String[] split = new CoordinateConversion().latLon2UTM(latLng.latitude, latLng.longitude).split(" ");
+        String x = split[2];
+        String y = split[3];
+
         URI uri;
         try {
-            String addr = "http://api.yr.no/weatherapi/locationforecast/1.9/"; //?lat=59.951458;lon=10.7426095
+            String addr = "http://reisapi.ruter.no/Place/GetClosestStops";
             List<NameValuePair> uriParams = new ArrayList<>();
-            uriParams.add(new BasicNameValuePair("lat", "59.951458"));
-            uriParams.add(new BasicNameValuePair("lon", "10.7426095"));
+            uriParams.add(new BasicNameValuePair("proposals", "5"));
+            uriParams.add(new BasicNameValuePair("Coordinates", String.format("(x=%s,y=%s)", x, y)));
             uri = new URI(addr + "?" + URLEncodedUtils.format(uriParams, "utf-8"));
         } catch (URISyntaxException e) {
             e.printStackTrace();
